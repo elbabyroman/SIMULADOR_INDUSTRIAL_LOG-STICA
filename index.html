@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casos Reales de Logística Industrial</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #282C35 0%, #66CDAA 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: #2F4F4F;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            position: relative;
+            color: white;
+        }
+
+        .welcome-screen {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #66CDAA 0%, #008080 100%);
+        }
+
+        .welcome-screen h1 {
+            color: #fff;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .welcome-icon {
+            font-size: 60px;
+            color: #FFF;
+            margin: 20px 0;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .welcome-text {
+            color: #fff;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+
+        #nameInput {
+            width: 80%;
+            max-width: 400px;
+            padding: 15px;
+            margin: 20px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        #nameInput:focus {
+            border-color: #008080;
+            outline: none;
+            box-shadow: 0 0 10px rgba(218, 27, 96, 0.2);
+        }
+
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            background: #008080;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(42, 82, 152, 0.3);
+        }
+
+        .question {
+            padding: 30px;
+            display: none;
+        }
+
+        .question.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question h3 {
+            color: #66CDAA;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(135deg, #66CDAA 0%, #2F4F4F 100%);
+            transition: width 0.3s ease;
+        }
+
+        .option {
+            background: white;
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            color: #666;
+        }
+
+        .option:hover {
+            transform: translateX(5px);
+            border-color: #008080;
+        }
+
+        .option.selected {
+            background: #f0f0f0;
+            border-color: #66CDAA;
+        }
+
+        .option.correct {
+            background: #c8e6c9;
+            border-color: #4caf50;
+        }
+
+        .option.incorrect {
+            background: #ffcdd2;
+            border-color: #f44336;
+        }
+
+        #scoreBoard {
+            padding: 30px;
+            background: #f5f7fa;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        #scoreBoard h2 {
+            color: #66CDAA;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .score-entry {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .timer {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #008080;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        #nextButton {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+        }
+
+        /* Animaciones para la puntuación */
+        .low-score {
+            background: #f44336;
+            color: white;
+            font-size: 2em;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .medium-score {
+            background: #ff9800;
+            color: white;
+            font-size: 2em;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .high-score {
+            background: #4caf50;
+            color: white;
+            font-size: 2em;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="nameForm" class="welcome-screen">
+            <i class="fas fa-shipping-fast welcome-icon"></i>
+            <h1>Casos de Logística Industrial</h1>
+            <p class="welcome-text">Analiza y resuelve problemas reales de la industria logística global.</p>
+            <input type="text" id="nameInput" placeholder="Ingresa tu nombre para comenzar" required>
+            <button onclick="startQuiz()">Comenzar</button>
+        </div>
+
+        <div id="quizContainer" style="display: none;">
+            <div class="timer">Tiempo: <span id="time">10:00</span></div>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div id="questions"></div>
+            <button onclick="submitAnswer()" id="nextButton">Siguiente</button>
+        </div>
+
+        <div id="scoreBoard" style="display: none;">
+            <h2>Puntuación Final</h2>
+            <div id="scoreDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        const cases = [
+            {
+                question: "Un centro de distribución global ha reportado un aumento de costos en la gestión de inventarios. ¿Cómo actuarías?",
+                options: [
+                    "Incrementar el stock para evitar desabastecimiento",
+                    "Implementar un sistema de inventario justo a tiempo (JIT)",
+                    "Reducir el número de proveedores internacionales",
+                    "Aumentar la capacidad de almacenamiento sin tocar inventarios"
+                ],
+                correct: 1,
+                explanation: "El sistema JIT puede reducir los costos de almacenamiento sin comprometer la eficiencia."
+            },
+            {
+                question: "Una cadena de suministro internacional tiene problemas para optimizar rutas de transporte. ¿Qué solución recomendarías?",
+                options: [
+                    "Aumentar el número de transportistas",
+                    "Implementar software de optimización de rutas en tiempo real",
+                    "Recortar gastos en transporte",
+                    "Cambiar completamente de proveedores"
+                ],
+                correct: 1,
+                explanation: "El software de optimización en tiempo real puede reducir costos y mejorar la eficiencia del transporte."
+            },
+            {
+                question: "Una fábrica de automóviles necesita mejorar su eficiencia. ¿Qué solución logística implementarías?",
+                options: [
+                    "Incrementar el nivel de inventario de piezas",
+                    "Adoptar el sistema Just-in-Time (JIT)",
+                    "Centralizar el control de calidad",
+                    "Contratar más personal en el almacén"
+                ],
+                correct: 1,
+                explanation: "El sistema JIT es ideal para reducir inventarios innecesarios en la producción."
+            },
+            {
+                question: "Una empresa de comercio electrónico ha tenido problemas con la logística inversa. ¿Qué harías?",
+                options: [
+                    "Ampliar los centros de distribución",
+                    "Implementar políticas claras de devoluciones y logística inversa",
+                    "Descontinuar productos con altos índices de devolución",
+                    "Reducir el personal en logística inversa"
+                ],
+                correct: 1,
+                explanation: "Tener políticas claras de devoluciones optimiza el proceso de logística inversa."
+            },
+            {
+                question: "Una compañía de alimentos perecederos necesita mejorar su control logístico. ¿Qué tecnología propondrías?",
+                options: [
+                    "Implementar RFID y rastreo en tiempo real",
+                    "Aumentar los días de almacenamiento",
+                    "Implementar inventario automatizado sin RFID",
+                    "Aumentar la frecuencia de entregas sin automatización"
+                ],
+                correct: 0,
+                explanation: "RFID y rastreo en tiempo real optimizan la gestión de productos perecederos."
+            },
+            {
+                question: "Un centro de distribución ha reportado largas demoras en la entrega de pedidos. ¿Cómo actuarías?",
+                options: [
+                    "Implementar cross-docking para reducir el tiempo en almacén",
+                    "Aumentar la cantidad de almacenes",
+                    "Cambiar el software de gestión de almacenes",
+                    "Contratar más personal temporal"
+                ],
+                correct: 0,
+                explanation: "El cross-docking ayuda a reducir significativamente los tiempos de almacenamiento."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let userName = "";
+
+        function startQuiz() {
+            userName = document.getElementById("nameInput").value;
+            if (userName.trim() === "") {
+                alert("Por favor, ingresa tu nombre para comenzar.");
+                return;
+            }
+
+            document.getElementById("nameForm").style.display = "none";
+            document.getElementById("quizContainer").style.display = "block";
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentQuestion >= cases.length) {
+                endQuiz();
+                return;
+            }
+
+            const caseData = cases[currentQuestion];
+            const questionDiv = document.getElementById("questions");
+            questionDiv.innerHTML = `
+                <div class="question active">
+                    <h3>${caseData.question}</h3>
+                    ${caseData.options.map((option, index) => `
+                        <div class="option" onclick="selectOption(${index})">${option}</div>
+                    `).join('')}
+                </div>
+            `;
+
+            updateProgressBar();
+        }
+
+        function selectOption(selectedOptionIndex) {
+            const caseData = cases[currentQuestion];
+            const options = document.querySelectorAll(".option");
+            options.forEach((option, index) => {
+                option.classList.remove("selected");
+                if (index === selectedOptionIndex) {
+                    option.classList.add("selected");
+                }
+            });
+        }
+
+        function submitAnswer() {
+            const selectedOption = document.querySelector(".option.selected");
+            if (!selectedOption) {
+                alert("Por favor, selecciona una opción.");
+                return;
+            }
+
+            const caseData = cases[currentQuestion];
+            const selectedOptionIndex = Array.from(document.querySelectorAll(".option")).indexOf(selectedOption);
+
+            if (selectedOptionIndex === caseData.correct) {
+                score++;
+            }
+
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function updateProgressBar() {
+            const progress = document.getElementById("progress");
+            const progressPercentage = (currentQuestion / cases.length) * 100;
+            progress.style.width = progressPercentage + "%";
+        }
+
+        function endQuiz() {
+            document.getElementById("quizContainer").style.display = "none";
+            document.getElementById("scoreBoard").style.display = "block";
+
+            let scoreMessage = "";
+            if (score <= 2) {
+                scoreMessage = `<div class="low-score">Lo sentimos, ${userName}. Necesitas mejorar. Puntuación: ${score} de ${cases.length}</div>`;
+            } else if (score <= 4) {
+                scoreMessage = `<div class="medium-score">Buen trabajo, ${userName}. Puntuación: ${score} de ${cases.length}</div>`;
+            } else {
+                scoreMessage = `<div class="high-score">¡Excelente, ${userName}! Puntuación: ${score} de ${cases.length}</div>`;
+            }
+
+            document.getElementById("scoreDetails").innerHTML = scoreMessage;
+        }
+    </script>
+</body>
+</html>
